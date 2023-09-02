@@ -16,7 +16,7 @@ Un equipo diverso y apasionado de estudiantes está detrás de este proyecto, li
 ## 📂 Estructura del Repositorio
 
 - 📁 `codigo`: Aquí reside la magia del código fuente que hemos creado juntos.
-- 📁 `datos`: Los datos son el corazón de nuestro proyecto. Aquí encontrarás los conjuntos de imágenes de mariposas que estamos utilizando.
+- 📁 `images`: Los datos son el corazón de nuestro proyecto. Aquí encontrarás los conjuntos de imágenes de mariposas que estamos utilizando.
 - 📁 `documentacion`: Documentos importantes y recursos útiles para comprender y replicar nuestro trabajo.
 - 📄 `README.md`: ¡Estás aquí! Este archivo contiene la información esencial que necesitas para comprender el proyecto.
 
