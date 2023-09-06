@@ -5,7 +5,6 @@ import os
 from PIL import Image
 import random
 
-
 class Rlogistica:
     def __init__(self, x, y=0, alpha=0):
         self.x = x
@@ -71,7 +70,6 @@ class Testing:
         accuracy = (correct / n) * 100
         print(f"Porcentaje de aciertos: {accuracy}%")
         print(f"Porcentaje de fallas: {100 - accuracy}%")
-
 
 if __name__ == '__main__':
 
