@@ -80,7 +80,7 @@ class Rlogistica:
         return np.dot(self.x, w)
 
     def S(self, w):
-        result = 1 / (1 + np.exp((-1) * self.Hiperplano(w)))  # write your code here
+        result = 1 / (1 + np.exp((-1) * self.Hiperplano(w)))
         return result
 
     def Loss_function(self, w):
