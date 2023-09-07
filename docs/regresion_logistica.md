@@ -67,9 +67,62 @@ La regresión logística se utiliza en una amplia variedad de aplicaciones, incl
 El uso de clases fue predominante en nuestra propia versión de la regresión logística. Para ello, se crearon tres clases: `Rlogistica`, `Training`y `Testing`.
 
 ### Clase Rlogistica
+La clase `Rlogistica` es la encargada de encapsular el funcionamientode la regresión logistica. Se inicializa con tres argumentos: `x`, `y` y `alpha`, que representan las características, las etiquetas y la tasa de aprendizaje, respectivamente.
+```python
+class Rlogistica:
+    def __init__(self, x, y=0, alpha=0):
+        self.x = x
+        self.y = y
+        self.alpha = alpha
+
+    def Hiperplano(self, w):
+        return np.dot(self.x, w)
+
+    def S(self, w):
+        result = 1 / (1 + np.exp((-1) * self.Hiperplano(w)))  # write your code here
+        return result
+
+    def Loss_function(self, w):
+        n = len(self.y)
+        A = self.y * np.log(self.S(w))
+        B = (1 - self.y) * np.log(1 - self.S(w))
+        C = np.sum(A + B)
+        loss = (-1 / n) * C
+        return loss
+
+    def Derivatives(self, w):
+        n = len(self.y)
+        s_x = self.S(w)
+        error = self.y - s_x
+        D = -np.dot(error, self.x) / n
+        return D
+
+    def change_parameters(self, derivatives, w):
+        return w - self.alpha * derivatives
+```
+El método `Hiperplano` representa la función matemática del hiperplano para obtener las predicciones. El método `S` representa la función sigmoide. El método `Loss_function` representa la función de pérdida. El método `Derivatives` representa las derivadas de la función de pérdida. Finalmente, el método `change_parameters` actualiza los pesos del modelo.
 
 ### Clase Training
+La clase `Training` es la responsable de entrenar el modelo de regresión logística en el dataset de mariposas. Se inicializa con tres argumentos: `x_train`, `y_train`, `alpha` y `epochs`, que representan las características de entrenamiento, las etiquetas de entrenamiento, la tasa de aprendizaje y la cantidad de veces que se entrena el modelo, respectivamente. La clase utiliza una instancia de la clase `Rlogistica` para calcular las predicciones, 
 
+```python
+class Training:
+    def __init__(self, x_trian, y_train, epochs, alpha):
+        self.Rlogistica = Rlogistica(x_trian, y_train, alpha)
+        self.epochs = epochs
+
+    def startT(self):
+        loss = []
+        w = np.ones(self.Rlogistica.x.shape[1])
+        for i in range(self.epochs):
+            L = self.Rlogistica.Loss_function(w)
+            dw = self.Rlogistica.Derivatives(w)
+            w = self.Rlogistica.change_parameters(dw, w)
+            loss.append(L)
+
+        return w, loss
+```
+El método `startT` entrena el modelo de regresión logística. Para ello, inicializa los pesos del modelo en 1 y, posteriormente, actualiza los pesos `epochs` veces. Finalmente, retorna los pesos y la lista de pérdidas.
 ### Clase `Testing`
 
 La clase `Testing` es la responsable de evaluar el rendimiento del modelo de regresión logística en el dataset de mariposas. Se inicializa con tres argumentos: `x_test`, `y_test` y `w`, que representan las características de prueba, las etiquetas de prueba y los pesos del modelo, respectivamente. La clase utiliza una instancia de la clase `Rlogistica` para calcular las predicciones, `y_pred`, utilizando la función sigmoide, `S`.
