@@ -50,6 +50,7 @@ La regresión logística se utiliza en una amplia variedad de aplicaciones, incl
 
 **Análisis de Sentimientos:** Para analizar opiniones de usuarios y clasificarlas como positivas o negativas.
 
+Para el caso de nuestro proyecto no podemos aplicar directamente la regresión logistica porque tenemos más de 2 clases de mariposas 🦋. Por lo cuál tenemos que extender el modelo para comparar "n" clases.
 # Limitaciones de la Regresión Logística:
 
 **Linealidad:** La regresión logística asume una relación lineal entre las características y la probabilidad logarítmica. Puede tener dificultades para modelar relaciones más complejas entre las variables.
@@ -147,3 +148,9 @@ class Testing:
 ```
 
 El método `Testing` calcula el número de predicciones correctas comparando `y_pred` con `y_test` y, posteriormente, calcula la precisión del modelo. Finalmente, imprime el número de aciertos, el porcentaje de aciertos y el porcentaje de fallas.
+
+# Referencias
+- [Machine Learning Mastery](https://machinelearningmastery.com/logistic-regression-for-machine-learning/)
+- [Wikipedia](https://en.wikipedia.org/wiki/Logistic_regression)
+- [Towards Data Science](https://towardsdatascience.com/logistic-regression-detailed-overview-46c4da4303bc)
+- [AprendeIA](https://aprendeia.com/algoritmo-regresion-logistica-machine-learning-teoria/)
