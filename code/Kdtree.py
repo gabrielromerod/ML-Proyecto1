@@ -10,7 +10,7 @@ class Kdtree:
     def insert(self):
         self.tree = KDTree(self.images[:, 0], 128)
 
-    def searchknn(self, image, k, files):
+    def searchknn(self, image, k):
         dist, self.ind = self.tree.query(image, k=k)
         result = [self.images[x][1] for x in self.ind]
         self.plurality_voting(result)
