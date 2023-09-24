@@ -1,9 +1,4 @@
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import os
-from PIL import Image
-import random
 
 class RegresionLogisticaMultinomial:
     def __init__(self, x, y, alpha=0.01, epochs=1000):
@@ -49,5 +44,32 @@ class RegresionLogisticaMultinomial:
         predicted_classes = np.argmax(probabilities, axis=1)
         return predicted_classes
 
+# Ejemplo de uso
+x_train = np.array([[1, 2, 1, 2, 1], 
+                    [2, 3, 2, 3, 2],
+                    [3, 4, 3, 3, 2],
+                    [4, 5, 4, 5, 4],
+                    [5, 6, 5, 6, 5],
+                    [6, 7, 0, 6, 7],
+                    [7, 8, 1, 7, 8],
+                    [8, 9, 2, 8, 9],
+                    [9, 10, 3, 9, 10]]
+                    )
 
-    
+y_train = np.array([0, 
+                    0, 
+                    0, 
+                    1,
+                    1,
+                    1,
+                    2,
+                    2,
+                    2])  # Clases: 0, 1, 2
+
+modelo = RegresionLogisticaMultinomial(x_train, y_train)
+modelo.train()
+
+x_test = np.array([[2, 3, 2, 3, 2],
+                   [2, 2, 2, 2, 2]])
+predicted_classes = modelo.predict(x_test)
+print("Clases predichas:", predicted_classes)
