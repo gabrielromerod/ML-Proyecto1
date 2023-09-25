@@ -8,7 +8,7 @@ from PIL import Image
 import shutil
 nueva_res = (128, 128) 
 
-
+#1
 class VecIMage:
     def __init__(self, image):
         self.image = image

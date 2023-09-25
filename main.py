@@ -4,11 +4,11 @@ from procesamiento_img import VecIMage
 
 def main():
     directorio_especies = "images"
-    nueva_res = (128, 128)  # Esta línea fue agregada
+    nueva_res = (128, 128) 
     
     create_species_folders(directorio_especies)
     
-    organizar_imagenes(directorio_especies, nueva_res)  # Corrección aquí
+    organizar_imagenes(directorio_especies, nueva_res)  
     
     imagenes, etiquetas = leer_imagenes(directorio_especies)
     
