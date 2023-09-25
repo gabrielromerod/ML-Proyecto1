@@ -6,7 +6,7 @@ from skimage.io import imread
 import pywt
 from PIL import Image
 import shutil
-nueva_resolucion = (128, 128) 
+nueva_res = (128, 128) 
 
 
 class VecIMage:
@@ -19,16 +19,16 @@ class VecIMage:
             LL, (LH, HL, HH) = pywt.dwt2(LL, 'haar')
         return LL.flatten()
 
-def convertir_a_escala_de_grises(ruta_imagen):
-    imagen_color = Image.open(ruta_imagen)
+def esc_grises(path_img):
+    imagen_color = Image.open(path_img)
     imagen_gris = imagen_color.convert("L") 
     imagen_array = np.array(imagen_gris)
     return imagen_array
 
-def redimensionar_imagen(ruta_imagen, nueva_resolucion):
-    imagen = Image.open(ruta_imagen)
-    imagen = imagen.resize(nueva_resolucion)
-    imagen.save(ruta_imagen)
+def redimensionar(path_img, nueva_res):
+    imagen = Image.open(path_img)
+    imagen = imagen.resize(nueva_res)
+    imagen.save(path_img)
 
 def leer_imagenes(directorio_especies):
     imagenes = []
@@ -39,8 +39,8 @@ def leer_imagenes(directorio_especies):
         for archivo in os.listdir(especie_carpeta):
             if archivo.endswith(".png"):
                 ruta = os.path.join(especie_carpeta, archivo)
-                imagen_en_gris = convertir_a_escala_de_grises(ruta)
-                redimensionar_imagen(ruta, nueva_resolucion) 
+                imagen_en_gris = esc_grises(ruta)
+                redimensionar(ruta, nueva_res) 
                 imagenes.append(imagen_en_gris)
                 etiquetas.append(especie_id)
     
@@ -56,8 +56,8 @@ def vectorizar_imagenes(imagenes, cortes):
     
     return imagenes_vectorizadas
 
-def crear_dataframes(imagenes_vectorizadas, etiquetas):
-    data = pd.DataFrame(imagenes_vectorizadas)
+def crear_dataframes(vec_img, etiquetas):
+    data = pd.DataFrame(vec_img)
     data['Etiqueta'] = etiquetas
     return data
 
@@ -86,33 +86,31 @@ def crear_carpetas(directorio_especies):
         except FileExistsError:
             pass
 
-def organizar_imagenes(directorio_imagenes, nueva_resolucion, directorio_especies):
+def organizar_imagenes(directorio_imagenes, nueva_res, directorio_especies):
     archivos = os.listdir(directorio_imagenes)
 
     for archivo in archivos:
         if archivo.endswith(".png"):
-            numero_especie = int(archivo[:3])
+            num_especie = int(archivo[:3])
 
-            carpeta_destino = os.path.join(directorio_especies, f"Especie_{numero_especie}")
+            new_carp = os.path.join(directorio_especies, f"Especie_{num_especie}")
 
-            if not os.path.exists(carpeta_destino):
-                os.makedirs(carpeta_destino)
+            if not os.path.exists(new_carp):
+                os.makedirs(new_carp)
 
             origen = os.path.join(directorio_imagenes, archivo)
-            destino = os.path.join(carpeta_destino, archivo)
+            destino = os.path.join(new_carp, archivo)
             imagen = Image.open(origen)
-            imagen = imagen.resize(nueva_resolucion)
+            imagen = imagen.resize(nueva_res)
             imagen.save(destino)
 
             shutil.move(origen, destino)
 
 def main():
     directorio_especies = "images"
-    
-    
     crear_carpetas(directorio_especies)
     
-    organizar_imagenes(directorio_especies, nueva_resolucion, directorio_especies)
+    organizar_imagenes(directorio_especies, nueva_res, directorio_especies)
     
     imagenes, etiquetas = leer_imagenes(directorio_especies)
     
