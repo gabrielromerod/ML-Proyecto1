@@ -74,7 +74,7 @@ def arbol_ex():
     X_test = test_data.drop(columns=['Etiqueta']).to_numpy()
     y_test = test_data['Etiqueta'].to_numpy()
 
-    tree = arbol.DT()
+    tree = arbol.DT(bootstrap=True)
     tree.train(X_train, y_train)
 
     y_pred = tree.predict(X_test)
@@ -124,5 +124,5 @@ def Kdtree_exc():
     #tree.searchknn(imagenes_vectorizadas[2], 20)
     
 if __name__ == "__main__":
-    rlogistica_exc()
+    arbol_ex()
     #Kdtree_exc()

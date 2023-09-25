@@ -48,8 +48,9 @@ class Nodo:
         return entropy_value
 
 class DT:
-    def __init__(self):
+    def __init__(self, bootstrap=False):
         self.root = None
+        self.bootstrap = bootstrap
 
     def create_DT(self, node):
         if node.IsTerminal():
@@ -75,6 +76,11 @@ class DT:
         self.create_DT(right_node)
 
     def train(self, X, Y):
+        if self.bootstrap:
+            indices = np.random.choice(np.arange(X.shape[0]), size=X.shape[0], replace=True)
+            X = X[indices]
+            Y = Y[indices]
+
         self.root = Nodo(X, Y)
         self.create_DT(self.root)
 
