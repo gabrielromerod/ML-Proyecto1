@@ -40,7 +40,10 @@ class RegresionLogisticaMultinomial:
         return w - self.alpha * gradient
     
     def train(self):
-        for epoch in range(self.epochs):
+        n = len(self.x)
+        for _ in range(self.epochs):
+            sample_idx = np.random.choice(n, n, replace=True)
+            x_train, y_sample = self.x[sample_idx], self.y[sample_idx]
             gradient = self.gradient()
             self.weights = self.change_parameters(gradient, self.weights)
 
@@ -48,6 +51,3 @@ class RegresionLogisticaMultinomial:
         probabilities = np.dot(x_test, self.weights)
         predicted_classes = np.argmax(probabilities, axis=1)
         return predicted_classes
-
-
-    

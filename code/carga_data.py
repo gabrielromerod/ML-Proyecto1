@@ -55,7 +55,7 @@ class VecIMage:
         LL = self.image
         for i in range(cortes):
             LL, (LH, HL, HH) = pywt.dwt2(LL, 'haar')
-        return LL.flatten()
+        return LL.flatten().tolist()
 
 def esc_grises(path_img):
     imagen_color = Image.open(path_img)
@@ -99,22 +99,26 @@ def crear_dataframes(vec_img, etiquetas):
     data['Etiqueta'] = etiquetas
     return data
 
-def dividir_datos(data, test_size=0.3):
+def dividir_datos(data, val_size=0.15, test_size=0.15):
     especies = data['Etiqueta'].unique()
     train_indices = []
+    val_indices = []
     test_indices = []
 
     for especie in especies:
         indices = data.index[data['Etiqueta'] == especie].tolist()
         random.shuffle(indices)
-        split_index = int(len(indices) * test_size)
-        test_indices.extend(indices[:split_index])
-        train_indices.extend(indices[split_index:])
+        val_index = int(len(indices) * val_size)
+        test_index = int(len(indices) * (val_size + test_size))
+        val_indices.extend(indices[:val_index])
+        test_indices.extend(indices[val_index:test_index])
+        train_indices.extend(indices[test_index:])
     
     train_data = data.iloc[train_indices]
+    val_data = data.iloc[val_indices]
     test_data = data.iloc[test_indices]
 
-    return train_data, test_data
+    return train_data, val_data, test_data
 
 def crear_carpetas(directorio_especies):
     for i in range(1, 11):

@@ -2,17 +2,15 @@ from scipy.spatial import KDTree
 from collections import Counter
 
 class Kdtree:
-    def __init__(self, images):  # [vector, etiqueta]
-        self.tree = KDTree()
+    def __init__(self, images, etiquetas):  # [vector, etiqueta]
+        self.tree = KDTree(images, 128)
         self.ind = []
+        self.etiquetas = etiquetas
         self.images = images
-
-    def insert(self):
-        self.tree = KDTree(self.images[:, 0], 128)
 
     def searchknn(self, image, k):
         dist, self.ind = self.tree.query(image, k=k)
-        result = [self.images[x][1] for x in self.ind]
+        result = [self.etiquetas[x] for x in self.ind]
         self.plurality_voting(result)
 
     
