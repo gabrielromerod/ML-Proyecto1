@@ -55,17 +55,3 @@ def test_ovr(x, weights, biases, y):
     print("Numero de aciertos:", np.sum(predicted_labels == y))
     print("Numero de errores:", np.sum(predicted_labels != y))
     print("Accuracy:", np.sum(predicted_labels == y) / len(y))
-
-np.random.seed(544165)
-iris_data_extended = pd.read_csv("Extended_DataSet_Iris_3_Clases.csv")
-
-label_mapping_extended = {label: idx for idx, label in enumerate(iris_data_extended['variety'].unique())}
-iris_data_extended['variety'] = iris_data_extended['variety'].map(label_mapping_extended)
-
-msk_extended = np.random.rand(len(iris_data_extended)) < 0.8
-train_data_extended = iris_data_extended[msk_extended]
-test_data_extended = iris_data_extended[~msk_extended]
-
-weights_extended, biases_extended = train_ovr(train_data_extended[['sepal.length', 'sepal.width', 'petal.length', 'petal.width']].values, train_data_extended['variety'].values, num_epochs=1000)
-
-test_ovr(test_data_extended[['sepal.length', 'sepal.width', 'petal.length', 'petal.width']].values, weights_extended, biases_extended, test_data_extended['variety'].values)

@@ -51,3 +51,5 @@ class RegresionLogisticaMultinomial:
         probabilities = np.dot(x_test, self.weights)
         predicted_classes = np.argmax(probabilities, axis=1)
         return predicted_classes
+
+
