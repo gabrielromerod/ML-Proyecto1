@@ -98,7 +98,7 @@ def rlogistica_exc(seed=None):
     train_data, val_data, test_data = carga_data.dividir_datos(data)
     
     model = R_Logistica.RegresionLogisticaMultinomial(train_data.drop(columns=['Etiqueta']).to_numpy(), train_data['Etiqueta'].to_numpy(), alpha=0.01, epochs=1000)
-    val_losses = model.train(x_val=val_data.drop(columns=['Etiqueta']).to_numpy(), y_val=val_data['Etiqueta'].to_numpy())    
+    val_losses = model.train(x_val=val_data.drop(columns=['Etiqueta']).to_numpy(), y_val=val_data['Etiqueta'].to_numpy(), bootstrap_size=100)    
     y_pred = model.predict(test_data.drop(columns=['Etiqueta']).to_numpy())
     
     metrics_summary(test_data['Etiqueta'].to_numpy(), y_pred, verbose=True)

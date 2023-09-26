@@ -23,33 +23,38 @@ class RegresionLogisticaMultinomial:
         log_prob = np.log(probabilities[np.arange(n), y_true])
         loss = -np.mean(log_prob)
         
-        # Añadimos término de regularización L2
         l2_reg = (self.lambda_reg / 2) * np.sum(self.weights ** 2)
         loss += l2_reg
         
         return loss
 
-    def gradient(self, logits, y_true):
+    def gradient(self, x, logits, y_true):
         probabilities = self.softmax(logits)
         n = len(y_true)
         y_encoded = np.eye(self.num_classes)[y_true]
         
-        # Gradiente principal
-        gradient = np.dot(self.x.T, (probabilities - y_encoded)) / n
+        gradient = np.dot(x.T, (probabilities - y_encoded)) / n
         
-        # Añadimos gradiente de regularización L2
         gradient += self.lambda_reg * self.weights
         
         return gradient
 
-    def train(self, x_val=None, y_val=None):
+    def train(self, x_val=None, y_val=None, bootstrap_size=None):
         val_losses = []
+        n_samples = self.x.shape[0]
+        
+        if bootstrap_size is None:
+            bootstrap_size = n_samples
 
-        for epoch in range(self.epochs):
-            logits = np.dot(self.x, self.weights)
-            self.losses.append(self.loss_function(logits, self.y))
+        for epoch in range(self.epochs): 
+            bootstrap_indices = np.random.choice(np.arange(n_samples), size=bootstrap_size, replace=True)
+            x_bootstrap = self.x[bootstrap_indices]
+            y_bootstrap = self.y[bootstrap_indices]
             
-            gradient = self.gradient(logits, self.y)
+            logits = np.dot(x_bootstrap, self.weights)
+            self.losses.append(self.loss_function(logits, y_bootstrap))
+            
+            gradient = self.gradient(x_bootstrap, logits, y_bootstrap)
             self.weights -= self.alpha * gradient
 
             if x_val is not None and y_val is not None:
