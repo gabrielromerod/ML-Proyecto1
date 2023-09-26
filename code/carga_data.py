@@ -68,6 +68,9 @@ def redimensionar(path_img, nueva_res):
     imagen = imagen.resize(nueva_res)
     imagen.save(path_img)
 
+def normalizar_imagen(imagen):
+    return imagen / 255.0
+
 def leer_imagenes(directorio_especies):
     imagenes = []
     etiquetas = []
@@ -78,11 +81,15 @@ def leer_imagenes(directorio_especies):
             if archivo.endswith(".png"):
                 ruta = os.path.join(especie_carpeta, archivo)
                 imagen_en_gris = esc_grises(ruta)
+                
+                imagen_normalizada = normalizar_imagen(imagen_en_gris)
+                
                 redimensionar(ruta, nueva_res) 
-                imagenes.append(imagen_en_gris)
+                imagenes.append(imagen_normalizada)
                 etiquetas.append(especie_id)
     
     return imagenes, etiquetas
+
 
 def vectorizar_imagenes(imagenes, cortes):
     imagenes_vectorizadas = []
