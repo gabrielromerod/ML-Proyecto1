@@ -56,7 +56,7 @@ def svm_ex():
     weights_extended, biases_extended, train_losses, val_losses = svm.train_ovr_bootstrap(X_train, y_train, X_val, y_val, num_epochs=1000)
     svm.plot_loss(train_losses, val_losses)
     y_pred = svm.predict_ovr(X_test, weights_extended, biases_extended)
-    svm.metrics_summary(y_test, y_pred)
+    metrics_summary(y_test, y_pred)
 
 def arbol_ex():
     directorio_especies = r"C:\Users\lords\Desktop\ML-Proyecto1\code\images"
@@ -101,12 +101,9 @@ def rlogistica_exc(seed=None):
     val_losses = model.train(x_val=val_data.drop(columns=['Etiqueta']).to_numpy(), y_val=val_data['Etiqueta'].to_numpy())    
     y_pred = model.predict(test_data.drop(columns=['Etiqueta']).to_numpy())
     
-    # Aquí, calculamos el F1-Score promedio y lo devolvemos para usarlo como métrica de referencia
-    count_positive_precision, avg_precision, f1_scores = metrics_summary(test_data['Etiqueta'].to_numpy(), y_pred, verbose=True)
+    metrics_summary(test_data['Etiqueta'].to_numpy(), y_pred, verbose=True)
 
-    plt.plot(val_losses, label='Validation Loss')
-    plt.legend()
-    plt.show() 
+    model.plot_loss(val_losses)
 
 def Kdtree_exc():
     directorio_especies = r"C:\Users\lords\Desktop\ML-Proyecto1\code\images"
@@ -116,12 +113,16 @@ def Kdtree_exc():
     imagenes, etiquetas = carga_data.leer_imagenes(directorio_especies)  # Lee las imágenes y sus etiquetas
     cortes = 3  # Define la cantidad de cortes que se realizarán en cada imagen para vectorizarla
     imagenes_vectorizadas = carga_data.vectorizar_imagenes(imagenes, cortes) # Vectoriza las imágenes
-    data = carga_data.crear_dataframes(imagenes_vectorizadas, etiquetas)  # Crea los dataframes para entrenamiento y prueba
-    train_data, val_data, test_data = carga_data.dividir_datos(data)  # Divide los datos en conjuntos de entrenamiento y prueba
-
     tree = Kdtree.Kdtree(imagenes_vectorizadas, etiquetas)
+    imputMari = r"C:\Users\lords\Desktop\ML-Proyecto1\testimg.jpg"
+    carga_data.redimensionar(imputMari, nueva_res)
+    tempImage = carga_data.imread(imputMari)
 
-    tree.searchknn(imagenes_vectorizadas[21], 10)
+    imagevector = carga_data.VecIMage(tempImage).process(3)
+    print(imagevector)
+    print(len(imagevector))
+    #tree.searchknn(imagenes_vectorizadas[2], 20)
     
 if __name__ == "__main__":
     rlogistica_exc()
+    #Kdtree_exc()
