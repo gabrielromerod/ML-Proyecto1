@@ -106,7 +106,7 @@ def rlogistica_exc(seed=None):
 
     plt.plot(val_losses, label='Validation Loss')
     plt.legend()
-    plt.show()
+    plt.show() 
 
 def Kdtree_exc():
     directorio_especies = r"C:\Users\lords\Desktop\ML-Proyecto1\code\images"
