@@ -78,4 +78,4 @@ class RegresionLogisticaMultinomial:
         plt.xlabel("Épocas")
         plt.ylabel("Pérdida")
         plt.legend()
-        plt.show()
+        plt.savefig('R_logistica.png')

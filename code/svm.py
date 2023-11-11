@@ -71,4 +71,4 @@ def plot_loss(train_losses, val_losses):
     plt.ylabel('Pérdida')
     plt.legend()
     plt.grid(True)
-    plt.show()
+    plt.savefig('SVM.png')

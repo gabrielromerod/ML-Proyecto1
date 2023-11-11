@@ -1,6 +1,7 @@
 import seaborn as sns
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 class Nodo:
     def __init__(self, X, Y):
@@ -48,13 +49,14 @@ class Nodo:
         return entropy_value
 
 class DT:
-    def __init__(self, bootstrap=False):
+    def __init__(self, bootstrap=False, max_depth=None):
         self.root = None
         self.bootstrap = bootstrap
+        self.max_depth = max_depth
 
-    def create_DT(self, node):
-        if node.IsTerminal():
-            node.terminal = node.Y[0]
+    def create_DT(self, node, depth=0):
+        if node.IsTerminal() or (self.max_depth and depth == self.max_depth):
+            node.terminal = np.bincount(node.Y).argmax()
             return
 
         best_feature, best_threshold, best_gain = node.best_split()
@@ -72,8 +74,8 @@ class DT:
         node.left = left_node
         node.right = right_node
 
-        self.create_DT(left_node)
-        self.create_DT(right_node)
+        self.create_DT(left_node, depth + 1)
+        self.create_DT(right_node, depth + 1)
 
     def train(self, X, Y):
         if self.bootstrap:
@@ -95,3 +97,12 @@ class DT:
     def predict(self, X):
         labels = [self.predict_sample(self.root, sample) for sample in X]
         return np.array(labels)
+    
+    def plot_tree(self, depths, train_errors, val_errors):
+        plt.plot(depths, train_errors, label="Training Error")
+        plt.plot(depths, val_errors, label="Validation Error")
+        plt.xlabel("Tree Depth")
+        plt.ylabel("Error")
+        plt.legend()
+        plt.title("Error vs. Tree Depth")
+        plt.show()

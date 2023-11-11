@@ -4,7 +4,7 @@ from collections import Counter
 class Kdtree:
     def __init__(self, images, etiquetas):  # [vector, etiqueta]
         self.tree = KDTree(images, 128)
-        self.ind = []
+        self.ind = []   
         self.etiquetas = etiquetas
         self.images = images
 

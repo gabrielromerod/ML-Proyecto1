@@ -74,12 +74,36 @@ def arbol_ex():
     X_test = test_data.drop(columns=['Etiqueta']).to_numpy()
     y_test = test_data['Etiqueta'].to_numpy()
 
-    tree = arbol.DT(bootstrap=True)
-    tree.train(X_train, y_train)
+    X_val = val_data.drop(columns=['Etiqueta']).to_numpy()
+    y_val = val_data['Etiqueta'].to_numpy()
 
-    y_pred = tree.predict(X_test)
+    def error_rate(y_true, y_pred):
+        return 1 - np.mean(y_true == y_pred)
 
-    metrics_summary(y_test, y_pred)
+    max_depths = list(range(1, 21))  # Profundidades de 1 a 20
+    train_errors = []
+    val_errors = []
+
+    for depth in max_depths:
+        tree = arbol.DT(bootstrap=False, max_depth=depth)
+        tree.train(X_train, y_train)
+        
+        y_train_pred = tree.predict(X_train)
+        train_error = error_rate(y_train, y_train_pred)
+        train_errors.append(train_error)
+
+        y_val_pred = tree.predict(X_val)
+        val_error = error_rate(y_val, y_val_pred)
+        val_errors.append(val_error)
+
+    # Graficar los errores
+    tree.plot_tree(max_depths, train_errors, val_errors)
+
+    # Si aún deseas entrenar y evaluar el árbol sin limitar la profundidad:
+    tree_full = arbol.DT(bootstrap=True)
+    tree_full.train(X_train, y_train)
+    y_pred_full = tree_full.predict(X_test)
+    metrics_summary(y_test, y_pred_full)
 
 def rlogistica_exc(seed=None):
     directorio_especies = r"C:\Users\lords\Desktop\ML-Proyecto1\code\images"
@@ -125,4 +149,3 @@ def Kdtree_exc():
     
 if __name__ == "__main__":
     arbol_ex()
-    #Kdtree_exc()
